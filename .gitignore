@@ -1,5 +1,16 @@
 Thumbs.db
 *.log
 *.bak
+*.o
+*.a
+Image
+tools/system
+.vscode/
+System.map
+boot/bootsect
+boot/setup
+*.img
+kernel/chr_drv/keyboard.s
+hdc-0.11.img
 .DS_Store
 

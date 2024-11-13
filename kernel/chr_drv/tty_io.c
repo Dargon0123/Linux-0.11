@@ -147,6 +147,7 @@ void copy_to_cooked(struct tty_struct * tty)
 	signed char c;
 
 	while (!EMPTY(tty->read_q) && !FULL(tty->secondary)) {
+        /* 从read_q 队列中读取字符 */
 		GETCH(tty->read_q,c);
 		if (c==13)
 			if (I_CRNL(tty))
@@ -222,8 +223,10 @@ void copy_to_cooked(struct tty_struct * tty)
 				PUTCH(c,tty->write_q);
 			tty->write(tty);
 		}
+        /* 将处理过的char 放入到缓冲队列secondary 的queue中去 */
 		PUTCH(c,tty->secondary);
 	}
+    /* wake up compatible task to read the secondary queue */
 	wake_up(&tty->secondary.proc_list);
 }
 
@@ -255,6 +258,7 @@ int tty_read(unsigned channel, char * buf, int nr)
 			break;
 		if (EMPTY(tty->secondary) || (L_CANON(tty) &&
 		!tty->secondary.data && LEFT(tty->secondary)>20)) {
+            /* set sleep if the secondary queue */
 			sleep_if_empty(&tty->secondary);
 			continue;
 		}

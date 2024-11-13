@@ -61,14 +61,15 @@ int sys_read(unsigned int fd,char * buf,int count)
 		return -EINVAL;
 	if (!count)
 		return 0;
-	verify_area(buf,count);
+	verify_area(buf,count); /* verify buf region is legal? */
 	inode = file->f_inode;
-	if (inode->i_pipe)
+	if (inode->i_pipe) /* pipe file */
 		return (file->f_mode&1)?read_pipe(inode,buf,count):-EIO;
-	if (S_ISCHR(inode->i_mode))
+	if (S_ISCHR(inode->i_mode)) /* char device file */
 		return rw_char(READ,inode->i_zone[0],buf,count,&file->f_pos);
-	if (S_ISBLK(inode->i_mode))
+	if (S_ISBLK(inode->i_mode)) /* block device file */
 		return block_read(inode->i_zone[0],&file->f_pos,buf,count);
+    /* dir or regular file */
 	if (S_ISDIR(inode->i_mode) || S_ISREG(inode->i_mode)) {
 		if (count+file->f_pos > inode->i_size)
 			count = inode->i_size - file->f_pos;
@@ -76,6 +77,7 @@ int sys_read(unsigned int fd,char * buf,int count)
 			return 0;
 		return file_read(inode,file,buf,count);
 	}
+    /* type error */
 	printk("(Read)inode->i_mode=%06o\n\r",inode->i_mode);
 	return -EINVAL;
 }

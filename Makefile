@@ -139,7 +139,7 @@ start:
 
 debug:
 	@echo $(OS)
-	@qemu-system-x86_64 -m 16M -boot a -fda Image -hda $(HDA_IMG) -s -S
+	@qemu-system-i386 -m 16M -boot a -fda Image -hda $(HDA_IMG) -s -S
 
 bochs-debug:
 	@$(BOCHS) -q -f tools/bochs/bochsrc/bochsrc-hd-dbg.bxrc	
