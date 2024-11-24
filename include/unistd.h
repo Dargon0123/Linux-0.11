@@ -131,6 +131,8 @@
 #define __NR_setregid	71
 #define __NR_iam		72
 #define __NR_whoami		73
+#define __NR_iam2		74
+#define __NR_whoami2		75
 
 #define _syscall0(type,name) \
   type name(void) \
