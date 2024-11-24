@@ -46,7 +46,7 @@ boot   hdc-0.11.img  include  kernel  Makefile  mm               readme.old  too
 
 
 
-* 第二次：成功
+* 第三次：成功
 
 接下来，就是挂载这样一个`.img` 的系统文件镜像。
 
