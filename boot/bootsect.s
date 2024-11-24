@@ -106,8 +106,12 @@ ok_load_setup:
 	xor	%bh, %bh
 	int	$0x10
 	
-	mov	$30, %cx
-	mov	$0x0007, %bx		# page 0, attribute 7 (normal)
+	mov	$27, %cx # 指定所打印的字符串长度
+    /*
+     * bx寄存器，前景颜色低4位，Bits0-3，背景颜色，Bits4-7
+     * 0x0A，表示background color 0x0（black），frontground color 0xA (light green)
+    */
+	mov	$0x000A, %bx		# page 0, attribute 7 (normal)
 	#lea	msg1, %bp
 	mov     $msg1, %bp
 	mov	$0x1301, %ax		# write string, move cursor
@@ -255,8 +259,7 @@ sectors:
 
 msg1:
 	.byte 13,10
-	.ascii "Dargon OS is booting ..."
-	.byte 13,10,13,10
+	.ascii "DargonOS is booting ...\r\n\r\n"
 
 	.org 508
 root_dev:
