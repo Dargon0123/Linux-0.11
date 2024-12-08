@@ -53,7 +53,9 @@ _start:
 	mov	$0x03, %ah	# read cursor pos
 	xor	%bh, %bh
 	int	$0x10		# save it in known place, con_init fetches
-	mov	%dx, %ds:0	# it from 0x90000.
+	mov	%dx, %ds:0	# it from 0x90000. 
+    # 将dx（光标位置）存储在0x90000（INITSEG）处，
+    # 如果后面打印msg有变动，这里需要重新更新光标，再次进行存储操作
 # Get memory size (extended mem, kB)
 
 	mov	$0x88, %ah 
@@ -134,7 +136,7 @@ _start:
 	mov %ds:2 , %ax
 	call print_hex
 
-##show 
+##show cyl
 	mov $0x03, %ah
 	xor %bh, %bh
 	int $0x10
@@ -175,6 +177,45 @@ _start:
 	mov %ds:0x8e, %ax
 	call print_hex
 	call print_nl
+
+##show display page
+	mov $0x03, %ah
+	xor %bh, %bh
+	int $0x10
+	mov $15, %cx
+	mov $0x0009, %bx
+	mov $vcard, %bp
+	mov $0x1301, %ax
+	int $0x10
+##show detail
+	mov %ds:4, %ax
+	call print_hex
+	call print_nl
+
+##show cideo mode
+	mov $0x03, %ah
+	xor %bh, %bh
+	int $0x10
+	mov $11, %cx
+	mov $0x000a, %bx
+	mov $vmode, %bp
+	mov $0x1301, %ax
+	int $0x10
+##show detail
+	mov %ds:6, %ax
+	call print_hex
+	call print_nl
+
+## reload cursor location after print some msg
+	mov	$INITSEG, %ax	# this is done in bootsect already, but...
+	mov	%ax, %ds
+	mov	$0x03, %ah	# read cursor pos
+	xor	%bh, %bh
+	int	$0x10		# save it in known place, con_init fetches
+	mov	%dx, %ds:0	# it from 0x90000.
+    # 将dx（光标位置）存储在0x90000（INITSEG）处，
+    # 如果后面打印msg有变动，这里需要重新更新光标，再次进行存储操作
+
 #l:
 #	jmp l
 ##
@@ -357,6 +398,11 @@ cur:
 	.ascii "Cursor POS:"
 mem:
 	.ascii "Memory SIZE:"
+
+vcard:
+	.ascii "Display Page:0x"
+vmode:
+	.ascii "Video Mode:"
 cyl:
 	.ascii "KB"
 	.byte 13,10,13,10
