@@ -7,12 +7,10 @@
 test insert img
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L2_Graph\Lab3_poroc-L3_05_fork_stack.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab2_Sys_Call/L2_Graph/segment_desc.png" alt="可爱的猫咪" />
   <br>
   <strong>图1-1</strong>
 </p>
-
-
 
 
 
