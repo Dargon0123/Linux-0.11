@@ -1,57 +1,18 @@
-Linux-0.11
+背景
 ==========
 
-The old Linux kernel source ver 0.11 which has been tested under modern Linux,  Mac OSX and Windows.
+本仓库用于学习和记录`Linux-0.11`，通过章节的形式，将系统的一步步进行debug的过程，记录于此，且不断地更新。通过慢慢分析源码，慢慢窥探系统里面的细节，无意中被这些技术细节所打动，里面的很多细节更加可以运动到我们实际工作中，算是一种指导思想类的存在。值得每个技术人员细细品鉴。
 
-## 1. Build on Linux
-
-### 1.1. Linux Setup
-
-* a linux distribution: debian , ubuntu and mint are recommended
-* some tools: gcc gdb qemu
-* a linux-0.11 hardware image file: hdc-0.11.img, please download it from http://www.oldlinux.org, or http://mirror.lzu.edu.cn/os/oldlinux.org/, ant put it in the root directory.
-* Now, This version already support the Ubuntu 16.04, enjoy it.
-
-### 1.2. hack linux-0.11
-```bash
-$ make help		// get help
-$ make  		// compile
-$ make start		// boot it on qemu
-$ make debug		// debug it via qemu & gdb, you'd start gdb to connect it.
-```
-```gdb
-$ gdb tools/system
-(gdb) target remote :1234
-(gdb) b main
-(gdb) c
-```
-
-## 2. Build on Mac OS X
-
-### 2.1. Mac OS X Setup
-
-* install cross compiler gcc and binutils
-* install qemu
-* install gdb. you need download the gdb source and compile it to use gdb because port doesn't provide i386-elf-gdb, or you can use the pre-compiled gdb in the tools directory.
-* a linux-0.11 hardware image file: hdc-0.11.img
-
-```bash
-$ sudo port install qemu
-$ sudo port install i386-elf-binutils i386-elf-gcc
-```
-
-optional
-```bash
-$ wget ftp://ftp.gnu.org/gnu/gdb/gdb-7.4.tar.bz2
-$ tar -xzvf gdb-7.4.tar.bz2
-$ cd gdb-7.4
-$ ./configure --target=i386-elf
-$ make
-```
-
-### 2.2. hack linux-0.11
-same as section 1.2
+环境搭建参考文档`README_OLD.md`
 
 
-## 3. Build on Windows
-todo...
+
+# 阅读顺序
+
+* [L1_OS_Booting：系统启动引导](https://github.com/Dargon0123/Linux-0.11/blob/Lab1_OS_Boot/Lab1_OS_Booting.md)
+* [L2_Sys_call：系统调用链路分析](https://github.com/Dargon0123/Linux-0.11/blob/Lab2_Sys_Call/README.md)
+* [L3_Process：一个进程创建的细节](https://github.com/Dargon0123/Linux-0.11/blob/Lab1_OS_Boot/Lab1_OS_Booting.md)
+* 梳理ing……
+
+
+
