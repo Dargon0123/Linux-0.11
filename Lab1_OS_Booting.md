@@ -9,26 +9,29 @@
 最初系统编译完之后，整个系统相当于是一堆二进制文件有序存放在系统硬盘里面，下面展示系统代码在编译之后存储到磁盘中相应的位置，其中涉及编译、链接和存储到硬盘的操作。可以看出，硬盘中相继存放着`bootsect, setup, system`模块。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-内存搬运01.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-内存搬运01.png" alt="可爱的猫咪" />
   <br>
   <strong>图1-1</strong>
 </p>
 
+
 接着，这里先放一张全景的内存搬运图。从下面的图片上做一个视觉化的理解，从内存使用上展示系统引导与启动的过程。展示系统在最初启动的时候，就是按照下面这样位置将三个模块进行一次次的搬运操作。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-内存搬运02.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-内存搬运02.png" alt="可爱的猫咪" />
   <br>
   <strong>图1-2</strong>
 </p>
+
 
 再接程序开始执行，进行head.s里面，看一些具体的程序设定操作，这里设置了分别设置了idt、gdt和paging，随后就跳转到main函数里面进行执行操作了。同是，在图中也标出了GDTR、IDTR和CR3着三个寄存器的重要位置。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-head.s.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-head.s.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-2</strong>
+  <strong>图1-3</strong>
 </p>
+
 
 
 
@@ -49,10 +52,11 @@
 这也就是说，我们平时的安插在主板的内存条并不是全部都被用到了，毕竟需要留下来一些地址空间访问外设。所以8GB的内存条，只作为内存RAM使用的的只有7.8GB的原因，少的0.2GB可能用来访问其它外设的。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\ubuntu内存信息.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot/L1_Graph/ubuntu内存信息.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-3</strong>
+  <strong>图2-1</strong>
 </p>
+
 
 ## 2.2、BIOS开始执行
 
@@ -85,20 +89,22 @@ BIOS程序主要是用于计算机开机时执行系统给部分的自检操作�
 这理的作用是，当系统检查到中断来的时候，通过这个idt里面的表，查询对应的中断函数，然后跳过去执行该中断函数。所以现在系统还没有启动完成，这里相当于初始化所有的idt里面的中断函数为ignore_idt，我们先来看看这个idt里面的对应的结构描述符
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\idt_descr.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\idt_descr.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图5-1</strong>
 </p>
+
 
 这里面对应着进行interrupt gate的部分
 
 以及这个初始化是如何填充这个数据结构的，形成下面这样数据内容的
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-idt.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-idt.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图5-2</strong>
 </p>
+
 
 我们接细细看一下代码
 
@@ -155,10 +161,11 @@ gdt:	.quad 0x0000000000000000	/* NULL descriptor */
 对应到实际的内存布局上就是，其中对于quad表示直接是64bits的宽度，用于填充GDT表项。在x86架构中，GDT表项的格式是固定的，每个表项占用8个字节。这个立即数的每一位都被设置为0，表示这是一个空描述符。后面进行依次填入内存里即可。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-setup_gdt.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-setup_gdt.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图5-3</strong>
 </p>
+
 
 
 
@@ -167,18 +174,20 @@ gdt:	.quad 0x0000000000000000	/* NULL descriptor */
 看下对应的寄存器的结构
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\PDE_struct.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\PDE_struct.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图5-4</strong>
 </p>
+
 
 细节
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\PDE_strcu_detail.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\PDE_strcu_detail.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图5-5</strong>
 </p>
+
 
 对应的是一个32bits的地址，细致观察，前12bits都是属性类似的，后面的20bits是对应page table/frame的地址，刚好$2^{12}$可以对应4KB，所以page与page之间都是4kb，也就是一个PDE对应着一个4kb的地址空间。
 
@@ -265,28 +274,31 @@ movsw				#从内存[si]处移动cx个字到[di]处
 当进入保护模式下，地址的计算方式，也就发生了变化，不在是实模式下的仅段基地址左移4bits完成的，变成了ds寄存器里面存储的值，是段选择子，其值对应的结构内容是这样的
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\segment_selector.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\segment_selector.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图6-1</strong>
 </p>
+
 
 其中对应的index部分，在GDT里面的索引index，按照该index，在GDT这张表里面，找到对应位置的代码段或者数据段，这种代码段和数据段的里面包含着段基地址，其对应的结构是下面这样的，
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\segment_desc.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\segment_desc.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图6-2</strong>
 </p>
+
 
 把相应的段基址取出来，加上后面的偏移地址，就是保护模式下的对应的内存中实际地址了。
 
 CPU通过48bit的gdtr寄存器，里面包含着GDT的位置，该寄存器的结构如下
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\gdtr.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\gdtr.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图6-3</strong>
 </p>
+
 
 在代码中看一下，GDT里面的结构就一目了然了，比如在`setup.s`里面是这样进行初始化操作的
 
@@ -326,18 +338,20 @@ gdt:
 我们直接在内存里面，将这部分代码里面的GDT展示划到实际的内存位置里面去逐个对应起来，就是如下了。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-gdt.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-gdt.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图6-4</strong>
 </p>
+
 
 对应的实际地址转换模式就是这样，最终转变为实际物理地址。
 
 <p align="center">
-  <img src="F:\Codefield\Code_C\EverNote_typora\Linux0.11总结\L1_Graph\Lab1_os_booting-保护模式地址.png" alt="可爱的猫咪" />
+  <img src="https://raw.githubusercontent.com/Dargon0123/Linux-0.11/Lab1_OS_Boot\L1_Graph\Lab1_os_booting-保护模式地址.png" alt="可爱的猫咪" />
   <br>
-  <strong>图1-1</strong>
+  <strong>图6-5</strong>
 </p>
+
 
 * 代码段：比如要访问代码段的内容，此时你的cs寄存器里面的值对应为0x08，0000 1000对应的index=1；也就是gdt[1]；
 
